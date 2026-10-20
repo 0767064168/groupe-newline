@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title id="page-title">Article – GroupeNewline Blog</title>
+  <meta name="description" content="Blog événementiel de GroupeNewline Abidjan."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/animations.css" />
+  <style>
+    body{background:var(--dark)}
+    /* HERO ARTICLE */
+    .article-hero{position:relative;padding:160px 0 80px;background:linear-gradient(180deg,var(--navy) 0%,var(--dark) 100%);text-align:center;overflow:hidden}
+    .article-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(212,175,55,0.12),transparent)}
+    .article-hero .emoji{font-size:5rem;display:block;margin-bottom:24px;animation:float 3s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .article-tag{display:inline-block;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.3);color:var(--gold);font-size:.72rem;letter-spacing:3px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:20px}
+    .article-title{font-family:var(--font-title);font-size:clamp(2rem,5vw,3.5rem);line-height:1.2;max-width:800px;margin:0 auto 20px;color:var(--white)}
+    .article-meta{color:var(--gray);font-size:.88rem;display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+    .article-meta span{display:flex;align-items:center;gap:6px}
+    /* CONTENT */
+    .article-body{max-width:780px;margin:0 auto;padding:80px 20px}
+    .article-body p{color:rgba(255,255,255,.78);line-height:1.9;font-size:1.02rem;margin-bottom:24px}
+    .article-body h2{font-family:var(--font-title);color:var(--white);font-size:1.8rem;margin:44px 0 16px;position:relative;padding-left:20px}
+    .article-body h2::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--gold);border-radius:2px}
+    .article-body h3{font-family:var(--font-title);color:var(--gold);font-size:1.2rem;margin:28px 0 12px}
+    .article-body ul{color:rgba(255,255,255,.78);line-height:2;padding-left:20px;margin-bottom:24px;font-size:1rem}
+    .article-body ul li::marker{color:var(--gold)}
+    .article-body blockquote{border-left:3px solid var(--gold);background:rgba(212,175,55,0.06);border-radius:0 8px 8px 0;padding:20px 24px;margin:28px 0;color:rgba(255,255,255,.85);font-style:italic;font-size:1.05rem}
+    .article-body .highlight-box{background:rgba(13,27,42,0.6);border:1px solid rgba(212,175,55,0.2);border-radius:12px;padding:28px;margin:36px 0}
+    /* SHARE */
+    .share-bar{display:flex;align-items:center;gap:12px;padding:24px 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:60px}
+    .share-bar span{color:var(--gray);font-size:.85rem;margin-right:4px}
+    .share-btn{padding:8px 18px;border-radius:20px;font-size:.82rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--gray);transition:.25s}
+    .share-btn:hover{border-color:var(--gold);color:var(--gold)}
+    /* RELATED ARTICLES */
+    .related{padding:60px 20px;background:#080808}
+    .related-inner{max-width:1100px;margin:0 auto}
+    .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
+    .related-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden;text-decoration:none;display:block;transition:.3s}
+    .related-card:hover{border-color:rgba(212,175,55,.3);transform:translateY(-4px)}
+    .related-card .rc-img{height:130px;background:linear-gradient(135deg,var(--navy),#1a0533);display:flex;align-items:center;justify-content:center;font-size:2.8rem}
+    .related-card .rc-body{padding:18px}
+    .related-card .rc-tag{font-size:.7rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase}
+    .related-card h3{font-family:var(--font-title);font-size:1rem;color:var(--white);margin:8px 0;line-height:1.4}
+    .related-card p{color:var(--gray);font-size:.83rem;line-height:1.6}
+    /* CTA */
+    .article-cta{max-width:780px;margin:0 auto 80px;background:linear-gradient(135deg,rgba(13,27,42,.8),rgba(10,10,10,.6));border:1px solid rgba(212,175,55,.25);border-radius:16px;padding:48px;text-align:center}
+    .article-cta h3{font-family:var(--font-title);font-size:1.8rem;color:var(--white);margin-bottom:12px}
+    .article-cta p{color:var(--gray);font-size:.95rem;margin-bottom:28px;line-height:1.7}
+    /* BACK */
+    .back-link{display:inline-flex;align-items:center;gap:8px;color:var(--gray);font-size:.85rem;transition:.25s;margin-bottom:40px;text-decoration:none}
+    .back-link:hover{color:var(--gold)}
+    @media(max-width:700px){.related-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/images/logo1.png.jpeg" alt="GroupeNewline Logo"/>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#services">Services</a></li>
+      <li><a href="../index.html#gallery">Galerie</a></li>
+      <li><a href="../index.html#devis">Devis</a></li>
+      <li><a href="../index.html#blog">Blog</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+    <a href="../index.html#reservation" class="nav-cta">Réserver</a>
+  </nav>
+
+  <!-- ARTICLE HERO -->
+  <div class="article-hero" id="articleHero">
+    <div class="container" style="position:relative;z-index:2">
+      <span class="emoji" id="art-emoji">📖</span>
+      <div class="article-tag" id="art-tag">Blog</div>
+      <h1 class="article-title" id="art-title">Chargement...</h1>
+      <div class="article-meta">
+        <span>📅 <span id="art-date">–</span></span>
+        <span>👁 <span id="art-vues">–</span> vues</span>
+        <span>⏱ 5 min de lecture</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE BODY -->
+  <div class="article-body" id="articleContent">
+    <a href="../index.html#blog" class="back-link">← Retour au blog</a>
+
+    <!-- Contenu chargé dynamiquement depuis la DB -->
+    <div id="articleDynamicContent" style="margin-bottom:40px"></div>
+
+    <!-- SHARE BAR -->
+    <div class="share-bar">
+      <span>Partager :</span>
+      <button class="share-btn" id="btnShareWhatsapp">💬 WhatsApp</button>
+      <button class="share-btn" id="btnShareFacebook">📘 Facebook</button>
+      <button class="share-btn" id="btnCopyLink">🔗 Copier le lien</button>
+    </div>
+
+    <!-- CTA -->
+    <div class="article-cta">
+      <h3>Prêt à créer votre événement ?</h3>
+      <p>Notre équipe est disponible pour vous accompagner et réaliser l'événement de vos rêves à Abidjan.</p>
+      <a href="../index.html#devis" class="btn-primary" style="display:inline-block;margin-right:12px">Calculer mon devis</a>
+      <a href="../index.html#contact" class="btn-outline" style="display:inline-block">Nous contacter</a>
+    </div>
+  </div>
+
+  <!-- RELATED ARTICLES -->
+  <section class="related">
+    <div class="related-inner">
+      <span class="section-label">Continuez la lecture</span>
+      <h2 class="section-title">Articles similaires</h2>
+      <div class="divider"></div>
+      <div class="related-grid" id="relatedGrid"></div>
+    </div>
+  </section>
+
+  <script src="../assets/js/db.js"></script>
+  <script src="./article.js"></script>
+  <script src="../assets/js/animations.js"></script>
+</body>
+</html>
+
+  <!-- FOOTER MINI -->
+  <footer style="background:#050505;border-top:1px solid rgba(212,175,55,.1);padding:28px 0;text-align:center">
+    <p style="color:var(--gray);font-size:.85rem">© 2025 GroupeNewline – <a href="../index.html" style="color:var(--gold)">Retour à l'accueil</a></p>
+  </footer>
+
+  <a href="https://wa.me/2250700000000?text=Bonjour%20GroupeNewline" class="whatsapp-float" target="_blank" title="Discuter sur WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a6.963 6.963 0 0 0-6.954 6.97c0 1.466.292 2.866.843 4.142L5.031 19.987l4.382-1.298c1.22.657 2.593 1.005 4.021 1.005h.004c3.872 0 7.01-3.1 7.018-6.977.002-1.863-.707-3.612-1.98-4.913-1.274-1.3-2.969-2.016-4.77-2.023M19.892 3.12C17.76 1.007 14.955 0 12.043 0 5.804 0 .656 5.122.66 11.414c0 2.096.547 4.142 1.588 5.945L.254 24l6.535-2.066c1.746.943 3.71 1.44 5.766 1.44h.006c6.215 0 11.358-5.122 11.363-11.414 0-3.046-1.185-5.931-3.342-8.09"/>
+    </svg>
+  </a>
+
+  <script src="../assets/js/db.js"></script>
+  <script src="./article.js"></script>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Blog Événementiel – GroupeNewline Abidjan</title>
+  <meta name="description" content="Inspirations, tendances et conseils d'experts en événementiel par GroupeNewline Abidjan. Mariages, galas, conférences et plus."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/animations.css" />
+  <style>
+    body { background: var(--dark); }
+
+    /* ---- HERO BLOG ---- */
+    .blog-hero {
+      position: relative;
+      padding: 140px 0 80px;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--navy) 0%, var(--dark) 100%);
+    }
+    .blog-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.12), transparent);
+    }
+    .blog-hero .container { position: relative; z-index: 2; }
+    .blog-hero-icon { 
+      font-size: 0; 
+      display: block; 
+      margin-bottom: 20px; 
+      animation: float 3s ease-in-out infinite;
+      width: 80px;
+      height: 80px;
+      margin-left: auto;
+      margin-right: auto;
+      background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(212,175,55,0.3);
+    }
+    .blog-hero-icon::before {
+      content: '';
+      width: 50px;
+      height: 50px;
+      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23D4AF37" stroke-width="1.5"><path d="M8 12h48v36a2 2 0 01-2 2H10a2 2 0 01-2-2V12z"/><path d="M8 12h48M16 20h32M16 28h32M16 36h32"/><circle cx="20" cy="24" r="2" fill="%23D4AF37"/><circle cx="20" cy="32" r="2" fill="%23D4AF37"/><circle cx="20" cy="40" r="2" fill="%23D4AF37"/></svg>') center/contain no-repeat;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+    /* ---- SEARCH & FILTERS ---- */
+    .blog-controls {
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 24px 0;
+      position: sticky;
+      top: 72px;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .controls-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+    }
+    .search-wrap input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 11px 16px 11px 42px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    .search-wrap input:focus { border-color: var(--gold); background: rgba(212,175,55,0.04); }
+    .search-wrap input::placeholder { color: var(--gray); }
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      opacity: 0.5;
+    }
+    .filter-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-tag {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--gray);
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: 0.25s;
+      white-space: nowrap;
+    }
+    .filter-tag.active, .filter-tag:hover {
+      background: rgba(212,175,55,0.12);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .results-count {
+      color: var(--gray);
+      font-size: 0.82rem;
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    /* ---- BLOG GRID ---- */
+    .blog-page-section { padding: 60px 0 100px; }
+    .blog-page-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 0;
+    }
+
+    /* ---- BLOG CARD ---- */
+    .bp-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: 0.35s;
+      display: flex;
+      flex-direction: column;
+    }
+    .bp-card:hover {
+      border-color: rgba(212,175,55,0.35);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .bp-img {
+      height: 200px;
+      background: linear-gradient(135deg, var(--navy), #1a0533);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      position: relative;
+      overflow: hidden;
+      color: var(--gold);
+      animation: subtle-pulse 3s ease-in-out infinite;
+    }
+    .bp-card:hover .bp-img {
+      animation: icon-bounce .6s ease-out;
+    }
+    .bp-img svg {
+      width: 80px;
+      height: 80px;
+      stroke: currentColor;
+      filter: drop-shadow(0 2px 8px rgba(212,175,55,0.2));
+    }
+    .bp-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212,175,55,.08), transparent);
+      opacity: 0;
+      transition: .4s;
+      z-index: 1;
+    }
+    .bp-card:hover .bp-img::before {
+      opacity: 1;
+    }
+    .bp-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.3));
+      z-index: 0;
+    }
+    .bp-img > svg {
+      position: relative;
+      z-index: 2;
+    }
+    @keyframes subtle-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    @keyframes icon-bounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1.1); }
+    }
+    .bp-tag-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(212,175,55,0.9);
+      color: #000;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 12px;
+      z-index: 3;
+    }
+    .bp-body {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .bp-meta {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .bp-meta span {
+      color: var(--gray);
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .bp-title {
+      font-family: var(--font-title);
+      font-size: 1.2rem;
+      color: var(--white);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .bp-excerpt {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      flex: 1;
+    }
+    .bp-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .bp-read-link {
+      color: var(--gold);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.25s;
+    }
+    .bp-read-link:hover { gap: 10px; }
+    .bp-views {
+      color: var(--gray);
+      font-size: 0.78rem;
+    }
+
+    /* ---- EMPTY STATE ---- */
+    .blog-empty {
+      text-align: center;
+      padding: 80px 20px;
+      grid-column: 1/-1;
+    }
+    .blog-empty .icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .blog-empty h3 { font-family: var(--font-title); font-size: 1.6rem; color: var(--white); margin-bottom: 8px; }
+    .blog-empty p { color: var(--gray); }
+
+    /* ---- LOAD MORE ---- */
+    .load-more-wrap { text-align: center; margin-top: 48px; }
+
+    /* ---- NEWSLETTER ---- */
+    .newsletter-section {
+      background: linear-gradient(135deg, rgba(13,27,42,0.8), rgba(10,10,10,0.9));
+      border-top: 1px solid rgba(212,175,55,0.15);
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+      padding: 60px 0;
+      text-align: center;
+    }
+    .newsletter-section h3 {
+      font-family: var(--font-title);
+      font-size: 2rem;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .newsletter-section p { color: var(--gray); margin-bottom: 28px; font-size: 0.95rem; }
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+      max-width: 480px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .newsletter-form input {
+      flex: 1;
+      min-width: 220px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 13px 18px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    .newsletter-form input:focus { border-color: var(--gold); }
+    .newsletter-form input::placeholder { color: var(--gray); }
+    .newsletter-form button {
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 28px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+    .newsletter-form button:hover { background: #fff; }
+    .newsletter-success {
+      display: none;
+      color: var(--gold);
+      font-weight: 600;
+      margin-top: 16px;
+      font-size: 0.95rem;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media(max-width:900px) { .blog-page-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width:600px) {
+      .blog-page-grid { grid-template-columns: 1fr; }
+      .controls-inner { flex-direction: column; align-items: stretch; }
+      .results-count { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/images/logo1.png.jpeg" alt="GroupeNewline Logo"/>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#services">Services</a></li>
+      <li><a href="../index.html#gallery">Galerie</a></li>
+      <li><a href="../index.html#temoignages">Témoignages</a></li>
+      <li><a href="../index.html#devis">Devis</a></li>
+      <li><a href="blog.html" style="color:var(--gold)">Blog</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+    <a href="../index.html#reservation" class="nav-cta">Réserver</a>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="blog-hero">
+    <div class="container">
+      <div class="blog-hero-icon"></div>
+      <span class="section-label">Actualités & Inspirations</span>
+      <h1 class="section-title">Le Blog GroupeNewline</h1>
+      <div class="divider" style="margin:20px auto"></div>
+      <p class="section-sub" style="margin:0 auto;text-align:center">
+        Tendances, conseils d'experts et inspirations pour faire de chaque événement un moment inoubliable.
+      </p>
+    </div>
+  </section>
+
+  <!-- FILTRES & RECHERCHE -->
+  <div class="blog-controls">
+    <div class="controls-inner">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Rechercher un article..." />
+      </div>
+      <div class="filter-tags" id="filterTags">
+        <button class="filter-tag active" data-tag="all">Tous</button>
+        <button class="filter-tag" data-tag="Mariage">💍 Mariage</button>
+        <button class="filter-tag" data-tag="Corporate">🏢 Corporate</button>
+        <button class="filter-tag" data-tag="Décoration">✨ Décoration</button>
+        <button class="filter-tag" data-tag="Gastronomie">🍽️ Gastronomie</button>
+        <button class="filter-tag" data-tag="Tendances">📈 Tendances</button>
+        <button class="filter-tag" data-tag="Conseils">💡 Conseils</button>
+      </div>
+      <span class="results-count" id="resultsCount">— articles</span>
+    </div>
+  </div>
+
+  <!-- BLOG GRID -->
+  <section class="blog-page-section">
+    <div class="container">
+      <div class="blog-page-grid" id="blogPageGrid"></div>
+      <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+        <button class="btn-outline" id="loadMoreBtn">Charger plus d'articles</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section">
+    <div class="container">
+      <h3>Restez inspiré·e</h3>
+      <p>Recevez nos derniers articles et tendances événementielles directement dans votre boîte mail.</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" id="nl-email" placeholder="votre@email.com" required/>
+        <button type="submit" id="nl-btn">S'abonner ✦</button>
+      </form>
+      <p class="newsletter-success" id="nl-success">✅ Merci ! Vous êtes maintenant abonné·e à notre blog.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER MINI -->
+  <footer style="background:#050505;border-top:1px solid rgba(212,175,55,.1);padding:28px 0;text-align:center">
+    <p style="color:var(--gray);font-size:.85rem">
+      © 2025 GroupeNewline –
+      <a href="../index.html" style="color:var(--gold)">Retour à l'accueil</a>
+      &nbsp;|&nbsp;
+      <a href="../index.html#contact" style="color:var(--gray)">Contact</a>
+    </p>
+  </footer>
+
+  <!-- WHATSAPP -->
+  <a href="https://wa.me/2250700000000?text=Bonjour%20GroupeNewline" class="whatsapp-float" target="_blank" title="Discuter sur WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a6.963 6.963 0 0 0-6.954 6.97c0 1.466.292 2.866.843 4.142L5.031 19.987l4.382-1.298c1.22.657 2.593 1.005 4.021 1.005h.004c3.872 0 7.01-3.1 7.018-6.977.002-1.863-.707-3.612-1.98-4.913-1.274-1.3-2.969-2.016-4.77-2.023M19.892 3.12C17.76 1.007 14.955 0 12.043 0 5.804 0 .656 5.122.66 11.414c0 2.096.547 4.142 1.588 5.945L.254 24l6.535-2.066c1.746.943 3.71 1.44 5.766 1.44h.006c6.215 0 11.358-5.122 11.363-11.414 0-3.046-1.185-5.931-3.342-8.09"/>
+    </svg>
+  </a>
+
+  <script src="../assets/js/db.js"></script>
+  <script src="./blog.js"></script>
+  <script src="../assets/js/animations.js"></script>
+</body>
+</html>

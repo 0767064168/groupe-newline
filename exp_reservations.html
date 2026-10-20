@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Exporter – Réservations</title>
+  <style>
+    body{font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;margin:40px;background:#0b0b0b;color:#f8f9fa}
+    .wrap{max-width:900px;margin:0 auto}
+    .card{background:rgba(255,255,255,.04);border:1px solid rgba(212,175,55,.25);border-radius:14px;padding:20px}
+    h1{color:#D4AF37;font-size:1.4rem;margin:0 0 10px}
+    button{background:#D4AF37;color:#000;border:none;padding:10px 16px;border-radius:10px;font-weight:800;cursor:pointer}
+    textarea{width:100%;min-height:220px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;padding:12px;box-sizing:border-box;margin-top:14px}
+    .muted{color:rgba(248,249,250,.7);font-size:.9rem;margin-top:6px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:14px}
+    a{color:#D4AF37}
+    code{color:#fff;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.08)}
+  </style>
+  <script src="assets/js/db.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Export de vos réservations</h1>
+      <div class="muted">Export CSV à partir des réservations stockées dans <code>localStorage</code> (simulation).</div>
+      <div class="row">
+        <button id="btnExport">Exporter en .csv</button>
+        <button id="btnCopy" style="background:transparent;color:#D4AF37;border:1px solid rgba(212,175,55,.4)" type="button">Copier CSV</button>
+        <a href="pages/admin.html">← Retour à l'admin</a>
+      </div>
+      <textarea id="out" readonly></textarea>
+    </div>
+  </div>
+
+  <script>
+    function reservationsToList() {
+      try {
+        return DB?.reservations?.all?.() || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function csvEscape(value) {
+      const s = value == null ? '' : String(value);
+      // échappe si texte contient : nouvelle ligne, virgule, point-virgule, guillemet
+      if (/[\n\r,;\"]/.test(s)) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    }
+
+    function toCsv(list) {
+      const headers = ['id','nom','email','tel','type','date','guests','statut','message','createdAt'];
+      const rows = list.map(r => headers.map(h => csvEscape(r[h])).join(','));
+      return [headers.join(','), ...rows].join('\n');
+    }
+
+    const out = document.getElementById('out');
+
+    document.getElementById('btnExport').addEventListener('click', () => {
+      const list = reservationsToList();
+      const csv = toCsv(list);
+      out.value = csv;
+
+      // BOM UTF-8 : améliore l'affichage des accents dans Excel
+      const blob = new Blob(["\ufeff", csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      const dt = new Date();
+      a.href = url;
+      a.download = `reservations_${dt.toISOString().slice(0,10)}.csv`;
+
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+
+    document.getElementById('btnCopy').addEventListener('click', async () => {
+      const list = reservationsToList();
+      const csv = toCsv(list);
+      out.value = csv;
+      try {
+        await navigator.clipboard.writeText(csv);
+        alert('CSV copié ✓');
+      } catch (e) {
+        alert('Copie impossible');
+      }
+    });
+  </script>
+</body>
+</html>
+

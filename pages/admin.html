@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Admin – GroupeNewline</title>
+  <!-- Refonte premium: fallback auto via copie du fichier dev -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/animations.css" />
+  <script src="../assets/js/chart.umd.min.js"></script>
+
+  <!-- Branding admin aligné sur le style du site public (accent or + effets premium) -->
+  <style>
+    :root{
+      --gold:#D4AF37;
+      --bg:#0b0b0b;
+      --card:#111111;
+      --card2:#161616;
+      --text:#F8F9FA;
+      --muted:rgba(248,249,250,.72);
+      --muted2:rgba(248,249,250,.52);
+      --border:rgba(212,175,55,.22);
+      --glass:rgba(255,255,255,.04);
+      --glass2:rgba(255,255,255,.06);
+
+      /* variables de la charte public */
+      --dark:#0A0A0A;
+      --navy:#0D1B2A;
+      --white:#F8F9FA;
+      --gray:#888;
+
+      --gold2:rgba(212,175,55,.35);
+      --headerH:72px;
+      --sidebarW:220px;
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body {
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(212,175,55,.08), transparent 55%),
+                  radial-gradient(900px 600px at 80% 0%, rgba(13,27,42,.55), transparent 60%),
+                  linear-gradient(180deg, #0b0b0b, #070707);
+    }
+
+
+    .adm-wrap {
+      display: flex;
+      min-height: 100vh;
+      padding-top: 0;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--headerH);
+      background: rgba(10, 10, 10, .75);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 175, 55, .18);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      z-index: 50;
+      transition: background .3s ease, transform .25s ease, box-shadow .25s ease;
+    }
+
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px
+    }
+
+    .topbar-left img {
+      height: 38px
+    }
+
+    .topbar-left h1 {
+      font-family: var(--font-title);
+      color: var(--gold);
+      font-size: 1.3rem;
+      margin: 0
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px
+    }
+
+    .badge-notif {
+      background: rgba(255, 70, 70, .8);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: -8px;
+      vertical-align: top
+    }
+
+    .btn-sm {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      letter-spacing: .5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-sm.outline {
+      background: transparent;
+      border: 1.5px solid rgba(255, 255, 255, .2);
+      color: rgba(248, 249, 250, .8);
+    }
+
+    .btn-sm.outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212, 175, 55, .08);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, .15);
+    }
+
+    .btn-sm svg,
+    .btn-gold svg,
+    .upload-tab svg,
+    .upload-zone svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-btn .btn-icon {
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: rgba(212, 175, 55, .16);
+      color: var(--gold);
+      border: 1px solid rgba(212, 175, 55, .25);
+    }
+
+    .btn-sm .btn-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebarW);
+      flex-shrink: 0;
+      background: linear-gradient(180deg, rgba(17, 17, 17, .72), rgba(11, 11, 11, .78));
+      border-right: 1px solid rgba(212, 175, 55, .22);
+      position: fixed;
+      top: var(--headerH);
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 40;
+      backdrop-filter: blur(18px);
+    }
+
+
+    .sidebar nav ul {
+      list-style: none;
+      padding: 16px 12px
+    }
+
+    .sidebar nav ul li a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      color: rgba(248, 249, 250, .65);
+      font-size: .87rem;
+      border-left: 3px solid transparent;
+      border-radius: 8px;
+      transition: all .28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      font-weight: 500;
+      letter-spacing: .3px;
+    }
+
+    .sidebar nav ul li a::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--gold);
+      transform: scaleY(0);
+      transform-origin: center;
+      transition: transform .28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .sidebar nav ul li a:hover,
+    .sidebar nav ul li a.active {
+      color: var(--gold);
+      background: rgba(212, 175, 55, .12);
+      border-left-color: transparent;
+    }
+
+    .sidebar nav ul li a.active::before,
+    .sidebar nav ul li a:hover::before {
+      transform: scaleY(1);
+    }
+
+    .sidebar nav ul li a span.icon {
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .12);
+      color: var(--gold);
+      transition: all .28s ease;
+      position: relative;
+    }
+
+    .sidebar nav ul li a span.icon svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .sidebar nav ul li a:hover span.icon,
+    .sidebar nav ul li a.active span.icon {
+      background: rgba(212, 175, 55, .16);
+      border-color: rgba(212, 175, 55, .3);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .sidebar-sep {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, .15), transparent);
+      margin: 12px 16px
+    }
+
+    /* MAIN */
+    .adm-main {
+      margin-left: var(--sidebarW);
+      flex: 1;
+      padding: 28px;
+      height: calc(100vh - var(--headerH));
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Make pages behave inside scroll container */
+    .page {
+      min-height: 0;
+    }
+
+
+    /* PAGES */
+    .page {
+      display: none
+    }
+
+    .page.active {
+      display: block
+    }
+
+    /* STATS CARDS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 40px
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, rgba(212,175,55,.16), rgba(212,175,55,.06));
+      border: 1px solid rgba(212, 175, 55, .4);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: all .35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 150%;
+      height: 150%;
+      background: radial-gradient(circle, rgba(212,175,55,.1), transparent);
+      animation: shine 6s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shine {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(20px, 20px); }
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: linear-gradient(180deg, var(--gold), transparent);
+      border-radius: 4px 0 0 4px;
+    }
+
+    .stat-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(212, 175, 55, .15);
+    }
+
+    .stat-card .val {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem;
+      color: var(--gold);
+      line-height: 1;
+      font-weight: 700;
+      text-shadow: 0 4px 12px rgba(212, 175, 55, .2);
+    }
+
+    .stat-card .lbl {
+      color: rgba(248, 249, 250, .75);
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 12px;
+      font-weight: 600;
+    }
+
+    .stat-card .trend {
+      font-size: .8rem;
+      margin-top: 10px;
+      color: #4caf50;
+      font-weight: 600;
+    }
+
+    .card-box {
+      background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+      border: 1px solid rgba(212,175,55,.25);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      transition: all .3s ease;
+      box-shadow: 0 8px 28px rgba(0,0,0,.2);
+    }
+
+    .card-box:hover {
+      border-color: rgba(212,175,55,.4);
+      box-shadow: 0 12px 40px rgba(212,175,55,.1);
+    }
+
+    .card-box h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 1.4rem;
+      margin-bottom: 24px;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th {
+      background: linear-gradient(90deg, rgba(212, 175, 55, .15), rgba(212, 175, 55, .08));
+      padding: 14px 18px;
+      text-align: left;
+      font-size: .78rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(212, 175, 55, .25);
+    }
+
+    td {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .85);
+      font-size: .9rem;
+      vertical-align: middle;
+      font-weight: 500;
+    }
+
+    tr:hover td {
+      background: rgba(212, 175, 55, .05)
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 24px;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+    }
+
+    .b-attente {
+      background: rgba(255, 165, 0, .2);
+      color: #ffb84d;
+      border: 1px solid rgba(255, 165, 0, .4);
+    }
+
+    .b-confirme {
+      background: rgba(0, 230, 118, .2);
+      color: #00e676;
+      border: 1px solid rgba(0, 230, 118, .4);
+    }
+
+    .b-termine {
+      background: rgba(157, 132, 255, .2);
+      color: #b8a0ff;
+      border: 1px solid rgba(157, 132, 255, .4);
+    }
+
+    /* ACTIONS */
+    .action-btn {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, .15);
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: .82rem;
+      transition: all .22s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-weight: 600;
+      letter-spacing: .4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: 0;
+      z-index: -1;
+      transition: opacity .22s ease;
+    }
+
+    .action-btn.confirm {
+      color: #00e676;
+      border-color: rgba(0, 230, 118, .35);
+    }
+
+    .action-btn.confirm:hover {
+      border-color: rgba(0, 230, 118, .7);
+      background: rgba(0, 230, 118, .12);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 230, 118, .2);
+    }
+
+    .action-btn.del {
+      color: #ff6b6b;
+      border-color: rgba(255, 107, 107, .35);
+    }
+
+    .action-btn.del:hover {
+      border-color: rgba(255, 107, 107, .7);
+      background: rgba(255, 107, 107, .12);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255, 107, 107, .2);
+    }
+
+    .action-btn.done {
+      color: #9d84ff;
+      border-color: rgba(157, 132, 255, .35);
+    }
+
+    .action-btn.done:hover {
+      border-color: rgba(157, 132, 255, .7);
+      background: rgba(157, 132, 255, .12);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(157, 132, 255, .2);
+    }
+
+    /* MESSAGES */
+    .msg-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .01));
+      border: 1px solid rgba(212, 175, 55, .2);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+      transition: all .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .msg-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+
+    .msg-card.unread {
+      border-left: 3px solid var(--gold);
+      background: linear-gradient(135deg, rgba(212, 175, 55, .1), rgba(255, 255, 255, .01));
+    }
+
+    .msg-card.unread::before {
+      opacity: 1;
+    }
+
+    .msg-card:hover {
+      border-color: rgba(212, 175, 55, .45);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(212, 175, 55, .15);
+    }
+
+    .msg-card .msg-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px
+    }
+
+    .msg-card h4 {
+      color: var(--white);
+      font-size: 1rem;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+
+    .msg-card .meta {
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .msg-card p {
+      color: rgba(255, 255, 255, .7);
+      font-size: .9rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* PAGE HEADER */
+    .page-hd {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(212, 175, 55, .2);
+    }
+
+    .page-hd h1 {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      color: var(--white);
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .page-hd p {
+      color: var(--gold);
+      font-size: .9rem;
+      margin: 8px 0 0;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* BLOG GRID */
+    .blog-adm-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 0
+    }
+
+    .blog-adm-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .01));
+      border: 1px solid rgba(212, 175, 55, .2);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all .35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    .blog-adm-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212, 175, 55, .1), transparent);
+      opacity: 0;
+      transition: opacity .35s ease;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .blog-adm-card:hover {
+      border-color: rgba(212, 175, 55, .45);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(212, 175, 55, .15);
+    }
+
+    .blog-adm-card:hover::before {
+      opacity: 1;
+    }
+
+    .blog-adm-img {
+      height: 140px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, .15), rgba(26, 5, 51, .8));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 0;
+    }
+
+    .blog-adm-img svg {
+      width: 56px;
+      height: 56px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .empty .empty-icon svg {
+      width: 56px;
+      height: 56px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .action-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .blog-adm-body {
+      padding: 20px
+    }
+
+    .blog-adm-body h3 {
+      font-family: var(--font-title);
+      font-size: 1.05rem;
+      color: var(--white);
+      margin-bottom: 10px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .blog-adm-body .views {
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* EMPTY STATE */
+    .empty {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--gray)
+    }
+
+    .empty .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 12px
+    }
+
+    /* TOAST */
+    #toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: rgba(13, 27, 42, .95);
+      border: 1px solid rgba(212, 175, 55, .4);
+      border-radius: 10px;
+      padding: 14px 22px;
+      color: var(--white);
+      font-size: .9rem;
+      z-index: 9999;
+      display: none;
+      backdrop-filter: blur(12px);
+      animation: toastIn .3s ease
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* MODAL */
+    .adm-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0, 0, 0, .8);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn .3s ease;
+    }
+
+    .adm-modal-overlay.open {
+      display: flex
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+      }
+      to {
+        opacity: 1;
+        backdrop-filter: blur(8px);
+      }
+    }
+
+    .adm-modal {
+      background: linear-gradient(135deg, #1a1a2e, #111827);
+      border: 1px solid rgba(212, 175, 55, .35);
+      border-radius: 18px;
+      padding: 40px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+      animation: slideUp .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .adm-modal h2 {
+      font-family: var(--font-title);
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin-bottom: 28px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .adm-modal-close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: all .25s ease;
+      line-height: 1;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    .adm-modal-close:hover {
+      color: #fff;
+      background: rgba(212, 175, 55, .1);
+      transform: rotate(90deg);
+    }
+
+    .adm-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 22px
+    }
+
+    .adm-field label {
+      font-size: .82rem;
+      color: var(--gold);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .adm-field input,
+    .adm-field select,
+    .adm-field textarea {
+      background: rgba(255, 255, 255, .06);
+      border: 1.5px solid rgba(212, 175, 55, .2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: .92rem;
+      outline: none;
+      transition: all .3s ease;
+      width: 100%;
+      font-weight: 500;
+    }
+
+    .adm-field input:focus,
+    .adm-field select:focus,
+    .adm-field textarea:focus {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, .08);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, .1);
+    }
+
+    .adm-field textarea {
+      min-height: 140px;
+      resize: vertical;
+      font-weight: 400;
+    }
+
+    .adm-field select option {
+      background: #111;
+      color: #fff;
+    }
+
+    .adm-field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), #e6c200);
+      color: #000;
+      border: 1px solid var(--gold);
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .92rem;
+      letter-spacing: 1.2px;
+      cursor: pointer;
+      transition: all .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-transform: uppercase;
+      box-shadow: 0 8px 20px rgba(212, 175, 55, .25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-gold::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, .2);
+      transition: left .4s ease;
+    }
+
+    .btn-gold:hover {
+      background: linear-gradient(135deg, #fff, #f0f0f0);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(212, 175, 55, .35);
+    }
+
+    .btn-gold:hover::before {
+      left: 100%;
+    }
+
+    /* UPLOAD ZONE */
+    .upload-tabs { display: flex; gap: 0; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .upload-tab { padding: 9px 20px; font-size: .82rem; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--gray); border-bottom: 2px solid transparent; transition: .2s; }
+    .upload-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .upload-panel { display: none; } .upload-panel.active { display: block; }
+    .upload-zone { border: 2px dashed rgba(212,175,55,.35); border-radius: 12px; padding: 36px 20px; text-align: center; cursor: pointer; transition: .3s; background: rgba(212,175,55,.03); }
+    .upload-zone:hover, .upload-zone.drag-over { border-color: var(--gold); background: rgba(212,175,55,.07); }
+    .upload-zone .uz-icon { font-size: 2.8rem; margin-bottom: 10px; }
+    .upload-zone p { color: var(--gray); font-size: .88rem; margin: 0; }
+    .upload-zone p strong { color: var(--gold); }
+    .upload-zone input[type=file] { display: none; }
+    .upload-progress { margin-top: 12px; background: rgba(255,255,255,.06); border-radius: 6px; overflow: hidden; display: none; }
+    .upload-progress-bar { height: 6px; background: var(--gold); width: 0%; transition: width .3s; }
+    .upload-preview-wrap { margin-top: 14px; display: none; border-radius: 10px; overflow: hidden; border: 1px solid rgba(212,175,55,.3); }
+    .upload-preview-wrap img, .upload-preview-wrap video { width: 100%; max-height: 180px; object-fit: cover; display: block; }
+    /* GALLERY ADM (premium grid + overlay) */
+    .gallery-adm-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:16px;
+      margin-top:0;
+      align-items:stretch;
+    }
+
+    .gal-adm-card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(212,175,55,.25);
+      position:relative;
+      transition:transform .4s cubic-bezier(0.34, 1.56, 0.64, 1), border-color .4s ease, box-shadow .4s ease;
+      box-shadow:0 12px 40px rgba(0,0,0,.4);
+    }
+
+    .gal-adm-card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background: radial-gradient(700px 220px at 20% 0%, rgba(212,175,55,.16), transparent 60%);
+      opacity:.0;
+      transition:opacity .4s ease;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    .gal-adm-card:hover{
+      transform:translateY(-10px) scale(1.02);
+      border-color:rgba(212,175,55,.55);
+      box-shadow:0 24px 72px rgba(212,175,55,.2);
+    }
+
+    .gal-adm-card:hover::before{opacity:1}
+
+    .gal-adm-media{
+      position:relative;
+      z-index:0;
+    }
+
+    .gal-adm-img{
+      width:100%;
+      height:100%;
+      aspect-ratio:4/3;
+      object-fit:cover;
+      display:block;
+      transform:scale(1);
+      transition:transform .6s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .gal-adm-card:hover .gal-adm-img{transform:scale(1.06)}
+
+    .gal-adm-overlay{
+      position:absolute;
+      inset:0;
+      background: linear-gradient(135deg, rgba(212,175,55,.22), rgba(0,0,0,.55));
+      opacity:0;
+      transition:opacity .35s ease;
+      z-index:2;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      padding:14px;
+    }
+
+    .gal-adm-card:hover .gal-adm-overlay{opacity:1}
+
+    .gal-adm-pill{
+      border:1px solid rgba(212,175,55,.35);
+      color:var(--text);
+      background: rgba(17,17,17,.35);
+      backdrop-filter: blur(10px);
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:.75rem;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+
+    .gal-adm-btn{
+      border:1.5px solid rgba(212,175,55,.5);
+      background: rgba(212,175,55,.15);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:800;
+      transition:transform .22s ease, background .22s ease, border-color .22s ease, box-shadow .22s ease;
+      font-size:.82rem;
+    }
+
+    .gal-adm-btn:hover{
+      transform:translateY(-3px);
+      background: rgba(212,175,55,.28);
+      border-color: rgba(212,175,55,.85);
+      box-shadow: 0 8px 20px rgba(212,175,55,.25);
+    }
+
+    .gal-adm-emoji{
+      width:100%;
+      aspect-ratio:4/3;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:3rem;
+      background: linear-gradient(135deg, rgba(13,27,42,.8), rgba(26,5,51,.8));
+    }
+
+    .gal-adm-footer{
+      position:relative;
+      z-index:3;
+      padding:12px 12px;
+      background: linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.35));
+      border-top: 1px solid rgba(255,255,255,.06);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .gal-adm-footer span{
+      font-size:.78rem;
+      color:rgba(248,249,250,.72);
+      font-weight:600;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+
+    /* RESPONSIVE */
+    @media(max-width:900px) {
+      :root{--sidebarW:0px}
+      .stats-row{grid-template-columns:1fr 1fr}
+      .sidebar{display:none}
+      .adm-main{margin-left:0}
+      .blog-adm-grid{grid-template-columns:1fr 1fr}
+      .gallery-adm-grid{grid-template-columns:1fr 1fr}
+      .charts-row{grid-template-columns: 1fr}
+    }
+
+
+    /* CHARTS */
+    .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+    .chart-box { background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.01)); border: 1px solid rgba(212,175,55,.25); border-radius: 16px; padding: 28px; box-shadow: 0 8px 28px rgba(0,0,0,.2); }
+    .chart-box h3 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.1rem; margin-bottom: 20px; font-weight: 700; letter-spacing: .3px; }
+    /* SEARCH BAR */
+    .search-bar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+    .search-bar input { flex: 1; min-width: 250px; background: rgba(255,255,255,.05); border: 1.5px solid rgba(212,175,55,.2); border-radius: 10px; padding: 12px 16px; color: #fff; font-size: .92rem; outline: none; transition: all .3s ease; font-family: 'Inter', sans-serif; font-weight: 500; }
+    .search-bar input:focus { border-color: var(--gold); background: rgba(212,175,55,.08); box-shadow: 0 0 0 3px rgba(212,175,55,.1); }
+    .search-bar select { background: rgba(255,255,255,.05); border: 1.5px solid rgba(212,175,55,.2); border-radius: 10px; padding: 12px 14px; color: #fff; font-size: .9rem; outline: none; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500; transition: all .3s ease; }
+    .search-bar select:focus { border-color: var(--gold); background: rgba(212,175,55,.08); }
+    .search-bar select option { background: #111; color: #fff; }
+    .hamburger-btn { display: none; background: none; border: none; cursor: pointer; padding: 6px; color: var(--white); font-size: 1.4rem; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 999; }
+    .sidebar-overlay.open { display: block; }
+    @media(max-width:900px) {
+      .hamburger-btn { display: flex; align-items: center; }
+      .sidebar { transform: translateX(-100%); transition: transform .3s; z-index: 1000; }
+      .sidebar.open { transform: translateX(0); }
+      .adm-main { margin-left: 0; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .blog-adm-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-adm-grid { grid-template-columns: 1fr 1fr; }
+      .charts-row { grid-template-columns: 1fr; }
+    }
+    @media(max-width:600px) {
+      .stats-row { grid-template-columns: 1fr; }
+      .blog-adm-grid { grid-template-columns: 1fr; }
+      .gallery-adm-grid { grid-template-columns: 1fr 1fr; }
+      .adm-field-row { grid-template-columns: 1fr; }
+      .charts-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger-btn" id="hamburgerBtn" title="Menu">☰</button>
+<span class="nav-logo" style="display:inline-flex;align-items:center;gap:12px">
+        <img src="../assets/images/logo1.png.jpeg" alt="Logo" style="height:38px" />
+        <span style="display:flex;flex-direction:column;line-height:1">
+          <span style="font-family:var(--font-title);color:var(--gold);font-weight:700;font-size:1.15rem">GroupeNewline</span>
+          <span style="color:var(--muted);font-size:.78rem;letter-spacing:2px;text-transform:uppercase">Admin</span>
+        </span>
+      </span>
+    </div>
+    <div class="topbar-right">
+      <span style="color:var(--gray);font-size:.85rem" id="adminName"></span>
+      <button class="btn-sm outline icon-btn" id="btnMessages">
+        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg></span>Messages <span class="badge-notif" id="notifCount">0</span>
+      </button>
+      <button class="btn-sm outline" id="btnLogout">Déconnexion</button>
+    </div>
+  </header>
+
+  <!-- Overlay mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="adm-wrap">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <li><a href="#" class="active" id="nav-dashboard"><span class="icon icon-dashboard"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="4" rx="1.5"/><rect x="14" y="9" width="7" height="12" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></span>Tableau de bord</a></li>
+          <li><a href="#" id="nav-reservations"><span class="icon icon-reservations"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M8 2v5"/><path d="M16 2v5"/></svg></span>Réservations</a></li>
+          <li><a href="#" id="nav-messages"><span class="icon icon-messages"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg></span>Messages</a></li>
+          <li><a href="#" id="nav-testimonials"><span class="icon icon-testimonials"><svg viewBox="0 0 24 24"><path d="M4 5h16v12H4z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg></span>Témoignages</a></li>
+          <li><a href="#" id="nav-blog"><span class="icon icon-blog"><svg viewBox="0 0 24 24"><path d="M6 4h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M14 4v5h5"/><path d="M8 12h8"/><path d="M8 16h6"/></svg></span>Blog</a></li>
+          <li><a href="#" id="nav-gallery"><span class="icon icon-gallery"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M7 15l3-4 4 5"/><circle cx="16.5" cy="10.5" r="1.5"/></svg></span>Galerie</a></li>
+          <div class="sidebar-sep"></div>
+          <li><a href="../exp_reservations.html"><span class="icon icon-export"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M6 19h12"/></svg></span>Exporter réservations</a></li>
+          <li><a href="../index.html"><span class="icon icon-site"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4a8 8 0 0 1 0 16"/></svg></span>Voir le site</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="adm-main">
+
+      <!-- PAGE DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-hd">
+          <div>
+            <h1>Tableau de bord</h1>
+            <p id="dateToday"></p>
+          </div>
+        </div>
+        <div class="stats-row" id="statsRow"></div>
+        <!-- GRAPHIQUES -->
+        <div class="charts-row">
+          <div class="chart-box">
+            <h3>Réservations par statut</h3>
+            <canvas id="chartStatuts" height="180"></canvas>
+          </div>
+          <div class="chart-box">
+            <h3>Réservations par type d'événement</h3>
+            <canvas id="chartTypes" height="180"></canvas>
+          </div>
+        </div>
+        <div class="card-box">
+          <h2>Dernières Réservations</h2>
+          <div style="overflow-x:auto">
+            <table id="dashTable">
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Événement</th>
+                  <th>Date</th>
+                  <th>Invités</th>
+                  <th>Statut</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dashTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE RESERVATIONS -->
+      <div class="page" id="page-reservations">
+        <div class="page-hd">
+          <div>
+            <h1>Réservations</h1>
+            <p>Gestion de toutes les demandes de réservation</p>
+          </div>
+        </div>
+        <!-- BARRE DE RECHERCHE -->
+        <div class="search-bar">
+          <input type="text" id="resSearch" placeholder="🔍 Rechercher par nom, email, type..." />
+          <select id="resFilter">
+            <option value="all">Tous statuts</option>
+            <option value="En attente">En attente</option>
+            <option value="Confirmé">Confirmées</option>
+            <option value="Terminé">Terminées</option>
+          </select>
+        </div>
+        <div class="card-box">
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Email</th>
+                  <th>Téléphone</th>
+                  <th>Événement</th>
+                  <th>Date</th>
+                  <th>Invités</th>
+                  <th>Statut</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="resTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE MESSAGES -->
+      <div class="page" id="page-messages">
+        <div class="page-hd">
+          <div>
+            <h1>Messages</h1>
+            <p>Formulaires de contact reçus</p>
+          </div>
+        </div>
+        <div id="msgList"></div>
+      </div>
+
+      <!-- PAGE TESTIMONIALS -->
+      <div class="page" id="page-testimonials">
+        <div class="page-hd">
+          <div>
+            <h1>Témoignages</h1>
+            <p>Publiez ou retirez les retours clients reçus</p>
+          </div>
+        </div>
+        <div id="testimonialList"></div>
+      </div>
+
+      <!-- PAGE BLOG -->
+      <div class="page" id="page-blog">
+        <div class="page-hd">
+          <div>
+            <h1>Articles Blog</h1>
+            <p>Gestion des articles publiés</p>
+          </div>
+          <button class="btn-gold" id="btnOpenBlog">+ Nouvel article</button>
+        </div>
+        <div class="blog-adm-grid" id="blogGrid"></div>
+      </div>
+
+      <!-- PAGE GALLERY -->
+      <div class="page" id="page-gallery">
+        <div class="page-hd">
+          <div>
+          <h1>Galerie</h1>
+        </div>
+
+        <!-- Boutons d'upload toujours visibles -->
+        <div style="display:flex;gap:16px;margin-bottom:28px;flex-wrap:wrap;">
+          <button class="btn-gold" id="btnOpenGalleryMedia" style="display:flex;align-items:center;gap:10px;padding:14px 28px;font-size:1rem;">
+            <svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v2H3V6z"/><path d="M3 10h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8z"/></svg>Charger image / vidéo
+          </button>
+          <button class="btn-sm outline" id="btnOpenGalleryGal" style="display:flex;align-items:center;gap:10px;padding:14px 24px;">
+            <svg viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z"/><path d="M4 10h16"/></svg>Nouvelle galerie
+          </button>
+        </div>
+
+        <!-- Zone de drop directe -->
+        <div id="quickDropZone" class="upload-zone" style="border:2px dashed rgba(212,175,55,.3);border-radius:14px;padding:20px 24px;display:flex;align-items:center;gap:16px;margin-bottom:28px;cursor:pointer;transition:.3s;background:rgba(212,175,55,.02)">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:rgba(212,175,55,.12);">
+            <svg viewBox="0 0 24 24"><path d="M12 4v12"/><path d="M8 12l4 4 4-4"/><path d="M4 20h16"/></svg>
+          </span>
+          <div>
+            <p style="color:var(--white);font-weight:600;margin:0">Glissez vos fichiers ici</p>
+            <p style="color:var(--gray);font-size:.85rem;margin:4px 0 0">ou cliquez sur le bouton "Charger image / vidéo" ci-dessus</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;align-items:center;justify-content:flex-start;flex-wrap:wrap;margin:0 0 16px 0;">
+          <button class="btn-sm outline" id="btnSeedGalleryAssets" style="padding:12px 18px;display:flex;align-items:center;gap:10px;">
+            <svg viewBox="0 0 24 24"><path d="M8 5h3v3H8z"/><path d="M13 5h3v3h-3z"/><path d="M8 13h3v3H8z"/><path d="M13 13h3v3h-3z"/></svg>Seed galerie depuis assets + uploads
+          </button>
+          <span id="seedStatus" style="color:var(--gray);font-size:.82rem;display:none;"></span>
+        </div>
+        <div class="gallery-adm-grid" id="galleryGrid"></div>
+      </div>
+
+
+    </main>
+  </div>
+
+  <!-- MODAL : NOUVEL ARTICLE -->
+  <div class="adm-modal-overlay" id="modalBlog">
+    <div class="adm-modal">
+      <button class="adm-modal-close" type="button">✕</button>
+      <h2>Nouvel article</h2>
+      <div class="adm-field">
+        <label>Titre de l'article</label>
+        <input type="text" id="b-titre" placeholder="Ex: Les tendances mariage 2025..." />
+      </div>
+      <div class="adm-field-row">
+        <div class="adm-field">
+          <label>Catégorie / Tag</label>
+          <select id="b-tag">
+            <option value="Mariage">💍 Mariage</option>
+            <option value="Corporate">🎤 Corporate</option>
+            <option value="Décoration">✨ Décoration</option>
+            <option value="Gastronomie">🍽️ Gastronomie</option>
+            <option value="Tendances">🔥 Tendances</option>
+            <option value="Conseils">💡 Conseils</option>
+          </select>
+        </div>
+        <div class="adm-field">
+          <label>Icône de l'article</label>
+          <input type="text" id="b-emoji" placeholder="Ex: 🌸 ou 📌" maxlength="4" />
+        </div>
+      </div>
+      <div class="adm-field">
+        <label>Date de publication</label>
+        <input type="date" id="b-date" />
+      </div>
+      <div class="adm-field">
+        <label>Extrait (résumé court)</label>
+        <textarea id="b-extrait" placeholder="Un résumé accrocheur de 1-2 phrases..."></textarea>
+      </div>
+      <div class="adm-field">
+        <label>Contenu complet de l'article</label>
+        <textarea id="b-contenu" style="min-height:200px"
+          placeholder="Rédigez le contenu de l'article ici. Vous pouvez utiliser des paragraphes."></textarea>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px">
+        <button class="btn-sm outline" id="btnCancelBlog" type="button">Annuler</button>
+        <button class="btn-gold" id="btnSaveBlog" type="button">Publier l'article ✦</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL : GALERIE -->
+  <div class="adm-modal-overlay" id="modalGallery">
+    <div class="adm-modal" style="max-width:500px">
+      <button class="adm-modal-close" type="button">✕</button>
+      <h2 id="modalGalleryTitle">Ajouter image/vidéo</h2>
+
+      <!-- Titre & Catégorie -->
+      <div class="adm-field">
+        <label>Titre / Description</label>
+        <input type="text" id="g-titre" placeholder="Ex: Mariage luxe – Cocody 2025" />
+      </div>
+      <div class="adm-field">
+        <label>Galerie (Catégorie)</label>
+        <input type="text" id="g-cat" placeholder="Ex: Mariage, Corporate..." list="galerie-categories" />
+        <datalist id="galerie-categories">
+          <option value="Mariage">
+          <option value="Corporate">
+          <option value="Gala">
+          <option value="Anniversaire">
+          <option value="Décoration">
+        </datalist>
+      </div>
+
+      <!-- Onglets Source -->
+      <div class="upload-tabs">
+        <button class="upload-tab active" id="tab-upload"><svg viewBox="0 0 24 24"><path d="M6 4h12l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M14 4v4h4"/></svg>Depuis l'ordinateur</button>
+        <button class="upload-tab" id="tab-url"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 1 7 0l1 1a3.5 3.5 0 0 1-5 5l-1-1"/><path d="M14 11a5 5 0 0 0-7 0l-1 1a3.5 3.5 0 0 0 5 5l1-1"/></svg>Par URL</button>
+      </div>
+
+      <!-- Panneau Upload -->
+      <div class="upload-panel active" id="panel-upload">
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="g-file" accept="image/*,video/mp4,video/webm" />
+          <div class="uz-icon"><svg viewBox="0 0 24 24"><path d="M6 4h12l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M14 4v4h4"/></svg></div>
+          <p><strong>Cliquez pour choisir</strong> ou glissez-déposez ici</p>
+          <p style="margin-top:6px;font-size:.78rem">Images : JPG, PNG, WEBP, GIF &bull; Vidéos : MP4, WEBM</p>
+        </div>
+        <div class="upload-progress" id="uploadProgress">
+          <div class="upload-progress-bar" id="uploadProgressBar"></div>
+        </div>
+        <div class="upload-preview-wrap" id="uploadPreviewWrap">
+          <img id="uploadPreviewImg" src="" alt="" style="display:none" />
+          <video id="uploadPreviewVid" src="" controls style="display:none;width:100%;max-height:180px"></video>
+        </div>
+        <p id="uploadFileName" style="color:var(--gold);font-size:.8rem;margin-top:8px;text-align:center"></p>
+      </div>
+
+      <!-- Panneau URL -->
+      <div class="upload-panel" id="panel-url">
+        <div class="adm-field" style="margin-bottom:8px">
+          <label>URL du média (Image ou Vidéo)</label>
+          <input type="text" id="g-url" placeholder="https://... ou ../assets/images/..." />
+        </div>
+        <div class="adm-field">
+          <label>Type de média</label>
+          <select id="g-media-type">
+            <option value="image">Image (jpg, png, webp...)</option>
+            <option value="video">Vidéo (mp4, webm...)</option>
+          </select>
+        </div>
+        <div id="g-preview-wrap" style="display:none;margin-bottom:16px">
+          <img id="g-preview" src="" alt="" style="width:100%;border-radius:8px;border:1px solid rgba(212,175,55,.3)" />
+          <video id="g-preview-vid" controls style="display:none;width:100%;border-radius:8px;border:1px solid rgba(212,175,55,.3)"></video>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px">
+        <button class="btn-sm outline" id="btnCancelGallery" type="button">Annuler</button>
+        <button class="btn-gold" id="btnSaveGallery" type="button">Ajouter ✦</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast"></div>
+
+  <!-- MODAL : MODIFIER RESERVATION -->
+  <div class="adm-modal-overlay" id="modalEditRes">
+    <div class="adm-modal" style="max-width:540px">
+      <button class="adm-modal-close" type="button">✕</button>
+      <h2>Modifier la réservation</h2>
+      <div class="adm-field-row">
+        <div class="adm-field">
+          <label>Nom complet</label>
+          <input type="text" id="edit-nom" placeholder="Nom du client" />
+        </div>
+        <div class="adm-field">
+          <label>Téléphone</label>
+          <input type="tel" id="edit-tel" placeholder="+225..." />
+        </div>
+      </div>
+      <div class="adm-field">
+        <label>Email</label>
+        <input type="email" id="edit-email" placeholder="email@..." />
+      </div>
+      <div class="adm-field-row">
+        <div class="adm-field">
+          <label>Type d'événement</label>
+          <select id="edit-type">
+            <option value="mariage">💍 Mariage</option>
+            <option value="conference">🎤 Conférence</option>
+            <option value="gala">🥂 Gala</option>
+            <option value="anniversaire">🎊 Anniversaire</option>
+            <option value="lancement">🏢 Lancement</option>
+            <option value="show">🎭 Show</option>
+          </select>
+        </div>
+        <div class="adm-field">
+          <label>Statut</label>
+          <select id="edit-statut">
+            <option value="En attente">⏳ En attente</option>
+            <option value="Confirmé">✅ Confirmé</option>
+            <option value="Terminé">🏁 Terminé</option>
+          </select>
+        </div>
+      </div>
+      <div class="adm-field-row">
+        <div class="adm-field">
+          <label>Date de l'événement</label>
+          <input type="date" id="edit-date" />
+        </div>
+        <div class="adm-field">
+          <label>Nombre d'invités</label>
+          <input type="number" id="edit-guests" min="1" placeholder="Ex: 150" />
+        </div>
+      </div>
+      <div class="adm-field">
+        <label>Message / Notes</label>
+        <textarea id="edit-message" placeholder="Notes additionnelles..."></textarea>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px">
+        <button class="btn-sm outline" id="btnCancelEdit" type="button">Annuler</button>
+        <button class="btn-gold" id="btnSaveEdit" type="button">💾 Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/db.js"></script>
+  <script src="./admin.js"></script>
+  <script src="../assets/js/animations.js"></script>
+</body>
+
+</html>
